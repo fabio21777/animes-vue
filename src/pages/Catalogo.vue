@@ -3,7 +3,7 @@
     <div class="row checkes">
       <div class="col-1">
         <label for="filmes"> <strong>FILMES</strong></label>
-        <input id="filmes" class="checkbox" type="checkbox" />
+        <input id="filmes" class="checkbox" type="checkbox" v-model="showFilmes" :value="showFilmes"/>
       </div>
       <div class="col-1">
         <label for="series"> <strong>SERIES</strong> </label>
@@ -11,14 +11,20 @@
           class="checkbox"
           id="series"
           type="checkbox"
-          value="true"
+          :value="showAnimes"
+          v-model="showAnimes"
           checked
         />
       </div>
     </div>
-    <div class="container-fluid">
-      <h4 class="titulo-anime">ANIME</h4>
+    <div v-show="showAnimes" class="container-fluid">
+      <h4 class="titulo-anime">ANIMES</h4>
     </div>
+
+    <div v-show="showFilmes" class="container-fluid">
+      <h4 class="titulo-filmes">FILMES</h4>
+    </div>
+
   </div>
 </template>
 
@@ -29,7 +35,10 @@ export default {
   components: {},
 
   data() {
-    return {};
+    return {
+      showFilmes:false,
+      showAnimes:true,
+    };
   }
 };
 </script>
@@ -51,6 +60,11 @@ export default {
 
 .titulo-anime {
   background: #ffa500;
+  color: #ffff;
+  display: inline-block;
+}
+.titulo-filmes {
+  background: #2f00ff;
   color: #ffff;
   display: inline-block;
 }
