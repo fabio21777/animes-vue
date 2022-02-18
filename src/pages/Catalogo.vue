@@ -19,27 +19,56 @@
     </div>
     <div v-show="showAnimes" class="container-fluid">
       <h4 class="titulo-anime">ANIMES</h4>
+      <div class="painel">
+
+      </div>
     </div>
 
     <div v-show="showFilmes" class="container-fluid">
       <h4 class="titulo-filmes">FILMES</h4>
     </div>
+    <div>
+      <div v-for="(anime,index) in animes" v-bind:key="index">
+         <p>{{anime.canonicalTitle}}</p>
+      </div>
 
+    </div>
   </div>
 </template>
 
 <script>
+import AnimesService from '../services/AnimesService.js';
 export default {
   name: "Catalogo",
 
   components: {},
 
+
+
   data() {
     return {
       showFilmes:false,
       showAnimes:true,
+      animes:[],
+      animesService : new AnimesService(),
+      data:[],
     };
-  }
+  },
+
+  created() {
+    this.buscarAnimes();
+  },
+
+  methods:{
+    buscarAnimes(){
+      this.animesService.getAnimes().then(response => {
+       console.log(response.data.data);
+       response.data.data.forEach(element => {
+         this.animes.push(element.attributes);
+       });
+      });
+    }
+  },
 };
 </script>
 
