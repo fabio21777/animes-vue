@@ -31,6 +31,8 @@ endpoints:
 
 ---
 grails:
+    cors:
+        enabled: true
     mime:
         disable:
             accept:
@@ -63,6 +65,7 @@ grails:
             xml:
               - text/xml
               - application/xml
+
     urlmapping:
         cache:
             maxsize: 1000

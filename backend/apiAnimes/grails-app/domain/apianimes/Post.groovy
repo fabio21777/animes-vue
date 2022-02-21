@@ -1,13 +1,16 @@
 package apianimes
 
+import java.time.LocalDateTime
+
 class Post {
   String title
-  String body
+  String descricao
+  LocalDateTime created_at
     static belongsTo = [autor:Autor]
     static hasMany = [comments:Comment]
     static constraints = {
       title nullable:false, maxSize:256
-      body nullable:true
+      descricao nullable:true
       autor nullable: true
       comments nullable: true
     }
