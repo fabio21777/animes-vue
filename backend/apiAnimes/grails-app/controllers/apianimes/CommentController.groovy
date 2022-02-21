@@ -3,70 +3,70 @@ package apianimes
 import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
 
-class AutorController {
+class CommentController {
 
-    AutorService autorService
+    CommentService commentService
     static responseFormats = ["json"]
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond autorService.list(params), model:[autorCount: autorService.count()]
+        respond commentService.list(params), model:[commentCount: commentService.count()]
     }
 
     def show(Long id) {
-        respond autorService.get(id)
+        respond commentService.get(id)
     }
 
     def create() {
-        respond new Autor(params)
+        respond new Comment(params)
     }
 
-    def save(Autor autor) {
-        if (autor == null) {
+    def save(Comment comment) {
+        if (comment == null) {
             notFound()
             return
         }
 
         try {
-            autorService.save(autor)
+            commentService.save(comment)
         } catch (ValidationException e) {
-            respond autor.errors, view:'create'
+            respond comment.errors, view:'create'
             return
         }
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'autor.label', default: 'Autor'), autor.id])
-                redirect autor
+                flash.message = message(code: 'default.created.message', args: [message(code: 'comment.label', default: 'Comment'), comment.id])
+                redirect comment
             }
-            '*' { respond autor, [status: CREATED] }
+            '*' { respond comment, [status: CREATED] }
         }
     }
 
     def edit(Long id) {
-        respond autorService.get(id)
+        respond commentService.get(id)
     }
 
-    def update(Autor autor) {
-        if (autor == null) {
+    def update(Comment comment) {
+        if (comment == null) {
             notFound()
             return
         }
 
         try {
-            autorService.save(autor)
+            commentService.save(comment)
         } catch (ValidationException e) {
-            respond autor.errors, view:'edit'
+            respond comment.errors, view:'edit'
             return
         }
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'autor.label', default: 'Autor'), autor.id])
-                redirect autor
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'comment.label', default: 'Comment'), comment.id])
+                redirect comment
             }
-            '*'{ respond autor, [status: OK] }
+            '*'{ respond comment, [status: OK] }
         }
     }
 
@@ -76,11 +76,11 @@ class AutorController {
             return
         }
 
-        autorService.delete(id)
+        commentService.delete(id)
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'autor.label', default: 'Autor'), id])
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'comment.label', default: 'Comment'), id])
                 redirect action:"index", method:"GET"
             }
             '*'{ render status: NO_CONTENT }
@@ -90,7 +90,7 @@ class AutorController {
     protected void notFound() {
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'autor.label', default: 'Autor'), params.id])
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'comment.label', default: 'Comment'), params.id])
                 redirect action: "index", method: "GET"
             }
             '*'{ render status: NOT_FOUND }

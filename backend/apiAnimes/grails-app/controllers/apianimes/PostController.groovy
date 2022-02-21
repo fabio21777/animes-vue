@@ -6,7 +6,7 @@ import static org.springframework.http.HttpStatus.*
 class PostController {
 
     PostService postService
-
+    static responseFormats = ["json"]
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
