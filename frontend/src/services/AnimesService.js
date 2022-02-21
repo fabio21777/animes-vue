@@ -7,9 +7,9 @@ export default  class AnimeService{
     }
 
     getAnimes(params){
+      console.log(params.page);
       params = params || {};
-      params.page = params.page || 0;
-      params.limit = params.limit || 20;
+
       return axios.get(`${this.http}/anime?page[limit]=${params.limit}&page[offset]=${params.page}`)
     }
 
