@@ -20,10 +20,15 @@
     <div v-show="showAnimes" class="container-fluid">
       <h4 class="titulo-anime">ANIMES</h4>
       <div class="painel">
-        <div class="painel-img" v-for="(anime,index) in animes" v-bind:key="index">
-          <p class="titulo-anime-img">{{anime.canonicalTitle}}</p>
-          <img :src="anime.posterImage.small" alt="">
-        </div>
+          <div class="painel-img" v-for="(anime,index) in animes" v-bind:key="index">
+            <router-link :to="{
+              name: 'resumo',
+              params: {id: anime.id}
+              }">
+              <p class="titulo-anime-img">{{anime.canonicalTitle}}</p>
+              <img :src="anime.posterImage.small" alt="">
+            </router-link>
+          </div>
       </div>
       <div class="botton-carregar">
         <button @click="carregarMais" type="button" class="btn btn-animes">Carregar Mais</button>
@@ -64,7 +69,7 @@ export default {
       data:[],
       params:{
         page:0,
-        limit:20,
+        limit:13,
       }
     };
   },
@@ -77,21 +82,22 @@ export default {
     buscarAnimes(){
       this.animesService.getAnimes(this.params).then(response => {
        response.data.data.forEach(element => {
+         element.attributes.id = element.id;
          if (element.attributes.showType === "movie"){
             this.filmes.push(element.attributes);
-            console.log("filmes");
          }
           else{
             this.animes.push(element.attributes);
           }
        });
       });
-    }
-  },
-  carregarMais(){
-    this.params.page++;
-    this.buscarAnimes();
+    },
 
+    carregarMais(){
+      this.params.page = this.params.page + 13;
+      console.log("carregar mais");
+      this.buscarAnimes();
+    }
   },
 };
 </script>
@@ -135,11 +141,14 @@ export default {
   text-align: center;
   background: #ffa500;
   cursor: pointer;
+  width: 284px;
+
 }
 .titulo-filme-img{
   text-align: center;
   background: #2f00ff;
   color: white;
+  width: 284px;
   cursor: pointer;
 }
 .img{
@@ -156,4 +165,14 @@ export default {
   color: #fff;
   cursor: pointer;
 }
+router-link a{
+    text-decoration: none !important;
+}
+
+
+a { text-decoration: none;
+    color: #fff;
+
+}
+
 </style>
