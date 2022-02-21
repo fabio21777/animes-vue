@@ -20,18 +20,27 @@
     <div v-show="showAnimes" class="container-fluid">
       <h4 class="titulo-anime">ANIMES</h4>
       <div class="painel">
-
+        <div class="painel-img" v-for="(anime,index) in animes" v-bind:key="index">
+          <p class="titulo-anime-img">{{anime.canonicalTitle}}</p>
+          <img :src="anime.posterImage.small" alt="">
+        </div>
       </div>
+      <div class="botton-carregar">
+        <button @click="carregarMais" type="button" class="btn btn-animes">Carregar Mais</button>
+      </div>
+
     </div>
 
     <div v-show="showFilmes" class="container-fluid">
       <h4 class="titulo-filmes">FILMES</h4>
+      <div class="painel">
+        <div class="painel-img" v-for="(filme,index) in filmes" v-bind:key="index">
+          <p class="titulo-filme-img">{{filme.canonicalTitle}}</p>
+          <img class="img" :src="filme.posterImage.small" alt="">
+        </div>
+      </div>
     </div>
     <div>
-      <div v-for="(anime,index) in animes" v-bind:key="index">
-         <p>{{anime.canonicalTitle}}</p>
-      </div>
-
     </div>
   </div>
 </template>
@@ -50,8 +59,13 @@ export default {
       showFilmes:false,
       showAnimes:true,
       animes:[],
+      filmes:[],
       animesService : new AnimesService(),
       data:[],
+      params:{
+        page:0,
+        limit:20,
+      }
     };
   },
 
@@ -61,13 +75,23 @@ export default {
 
   methods:{
     buscarAnimes(){
-      this.animesService.getAnimes().then(response => {
-       console.log(response.data.data);
+      this.animesService.getAnimes(this.params).then(response => {
        response.data.data.forEach(element => {
-         this.animes.push(element.attributes);
+         if (element.attributes.showType === "movie"){
+            this.filmes.push(element.attributes);
+            console.log("filmes");
+         }
+          else{
+            this.animes.push(element.attributes);
+          }
        });
       });
     }
+  },
+  carregarMais(){
+    this.params.page++;
+    this.buscarAnimes();
+
   },
 };
 </script>
@@ -96,5 +120,40 @@ export default {
   background: #2f00ff;
   color: #ffff;
   display: inline-block;
+}
+.painel {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.painel-img{
+  padding-right: 50px;
+  padding-bottom: 40px;
+  cursor: pointer;
+}
+.titulo-anime-img {
+  text-align: center;
+  background: #ffa500;
+  cursor: pointer;
+}
+.titulo-filme-img{
+  text-align: center;
+  background: #2f00ff;
+  color: white;
+  cursor: pointer;
+}
+.img{
+  width: 100%;
+  height: 402px;
+}
+.botton-carregar {
+  display: flex;
+  justify-content: center;
+}
+.btn-animes {
+  background: #ffa500;
+  border: none;
+  color: #fff;
+  cursor: pointer;
 }
 </style>
